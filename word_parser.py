@@ -1,15 +1,5 @@
 from bs4 import BeautifulSoup
-
-
-class Word:
-    def __init__(self, letters, wpm, is_error):
-        self.letters = letters
-        self.wpm = wpm
-        self.is_error = is_error
-
-    
-    def __repr__(self):
-        return f'{self.letters}: wpm={self.wpm}, typo={self.is_error}'
+from word_analyzer import Word, WordList
 
 
 def get_word_from_div(word_div):
@@ -28,9 +18,9 @@ def get_wordlist_from_file(filename):
     all_word_divs = word_divs_wrapper.find_all('div', {'class': 'word'})
 
     # Add all words to wordlist
-    wordlist = []
+    wordlist = WordList()
     for word_div in all_word_divs:
-        wordlist.append(Word(
+        wordlist.add(Word(
             letters=get_word_from_div(word_div),
             wpm=word_div.get('burst', None),
             is_error=('error' in word_div.get('class', None))
