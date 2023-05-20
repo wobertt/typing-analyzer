@@ -202,3 +202,5 @@ ALL_WORDS = (
     "help",
     "line"
 )
+
+NUM_WORDS = len(ALL_WORDS)
