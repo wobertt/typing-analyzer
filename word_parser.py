@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-from word_analyzer import Word, WordList
+from word_analyzer import Word
 
 
 def get_word_from_div(word_div):
@@ -18,9 +18,9 @@ def get_wordlist_from_file(filename):
     all_word_divs = word_divs_wrapper.find_all('div', {'class': 'word'})
 
     # Add all words to wordlist
-    wordlist = WordList()
+    wordlist = []
     for word_div in all_word_divs:
-        wordlist.add(Word(
+        wordlist.append(Word(
             letters=get_word_from_div(word_div),
             wpm=word_div.get('burst', None),
             is_error=('error' in word_div.get('class', None))
