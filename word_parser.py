@@ -9,7 +9,7 @@ def get_word_from_div(word_div):
 
 
 def get_wordlist_from_file(filename):
-    with open('test.txt', 'r') as f:
+    with open(filename, 'r') as f:
         html_doc = ''.join(f.readlines())
 
     # Find words class in HTML
