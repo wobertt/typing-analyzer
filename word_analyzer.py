@@ -30,6 +30,7 @@ class UserData:
     
 
     def add_word(self, word: Word):
+        print(word.__repr__())
         idx = UserData.word_to_idx[word.letters]
         self.df.speeds[idx].append(word.wpm)
         self.df.errors[idx].append(word.is_error)
