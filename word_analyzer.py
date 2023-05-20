@@ -35,22 +35,8 @@ class UserData:
         self.df.errors[idx].append(word.is_error)
 
 
-
-def main(): # Testing
-    data = UserData()
-    data.add('the', 123, False)
     def add_words(self, wordlist: list[Word]):
         for word in wordlist:
             self.add_word(word)
     
 
-    data2 = UserData()
-    data2.add('be', 12, True)
-    print(data.df.head())
-    print(data2.df.head())
-
-
-
-if __name__ == '__main__':
-    main()
-    
