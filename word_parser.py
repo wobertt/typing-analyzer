@@ -4,7 +4,12 @@ from word_analyzer import Word
 
 def get_word_from_div(word_div):
     letter_tags = word_div.find_all('letter')
-    letters = ''.join(letter_tag.string for letter_tag in letter_tags)
+    
+    letters = ''.join(
+        letter_tag.string for letter_tag in letter_tags
+        if 'extra' not in letter_tag.get('class', [])
+    )
+
     return letters
 
 
