@@ -1,5 +1,6 @@
 from constants import ALL_WORDS, NUM_WORDS
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 class Word:
@@ -16,25 +17,31 @@ class Word:
 class UserData:
     word_to_idx = {word: pos for pos, word in enumerate(ALL_WORDS)}
 
-    def __init__(self):
+    def __init__(self, wordlist=None):
         self.df = pd.DataFrame(
             {'words': ALL_WORDS,
              'speeds': [[] for _ in range(NUM_WORDS)],
              'errors': [[] for _ in range(NUM_WORDS)]
             }
         )
+        
+        if wordlist is not None:
+            self.add_words(wordlist)
     
 
-    def add(self, word: str, speed: float, is_error: bool):
-        idx = UserData.word_to_idx[word]
-        self.df.speeds[idx].append(speed)
-        self.df.errors[idx].append(is_error)
+    def add_word(self, word: Word):
+        idx = UserData.word_to_idx[word.letters]
+        self.df.speeds[idx].append(word.wpm)
+        self.df.errors[idx].append(word.is_error)
 
 
 
 def main(): # Testing
     data = UserData()
     data.add('the', 123, False)
+    def add_words(self, wordlist: list[Word]):
+        for word in wordlist:
+            self.add_word(word)
     
 
     data2 = UserData()
