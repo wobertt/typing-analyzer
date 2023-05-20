@@ -1,4 +1,5 @@
-from constants import ALL_WORDS
+from constants import ALL_WORDS, NUM_WORDS
+import pandas as pd
 
 
 class Word:
@@ -12,25 +13,37 @@ class Word:
         return f'{self.letters}: wpm={self.wpm}, typo={self.is_error}'
     
 
+class UserData:
+    word_to_idx = {word: pos for pos, word in enumerate(ALL_WORDS)}
 
-class WordList:
     def __init__(self):
-        self.words = []
+        self.df = pd.DataFrame(
+            {'words': ALL_WORDS,
+             'speeds': [[] for _ in range(NUM_WORDS)],
+             'errors': [[] for _ in range(NUM_WORDS)]
+            }
+        )
     
 
-    def add(self, word):
-        self.words.append(word)
+    def add(self, word: str, speed: float, is_error: bool):
+        idx = UserData.word_to_idx[word]
+        self.df.speeds[idx].append(speed)
+        self.df.errors[idx].append(is_error)
+
+
+
+def main(): # Testing
+    data = UserData()
+    data.add('the', 123, False)
     
 
-    def get_average_wpm(self):
-        num_words, wpm_sum = 0, 0
-        for word in self.words:
-            if word.wpm is None:
-                continue
-            num_words += 1
-            wpm_sum += word.wpm
-        
-        return wpm_sum / num_words
-    
+    data2 = UserData()
+    data2.add('be', 12, True)
+    print(data.df.head())
+    print(data2.df.head())
 
+
+
+if __name__ == '__main__':
+    main()
     
