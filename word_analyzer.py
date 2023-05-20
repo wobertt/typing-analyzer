@@ -41,3 +41,15 @@ class UserData:
             self.add_word(word)
     
 
+    def plot_speed_histogram(self):
+        speeds = []
+        for speed_data in self.df.speeds:
+            speeds.extend(speed_data)
+        
+        series = pd.Series(speeds)
+        # Remove outliers
+        series_adjusted = series[series.between(series.quantile(.03), series.quantile(.97))]
+
+        series_adjusted.plot.hist(legend=False, bins=50)
+
+        plt.show()
