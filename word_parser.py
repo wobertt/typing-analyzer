@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from word_analyzer import Word
+import csv
 
 
 def get_word_from_div(word_div):
@@ -13,7 +14,7 @@ def get_word_from_div(word_div):
     return letters
 
 
-def get_wordlist_from_file(filename):
+def get_wordlist_from_html(filename):
     with open(filename, 'r') as f:
         html_doc = ''.join(f.readlines())
 
@@ -34,4 +35,26 @@ def get_wordlist_from_file(filename):
     return wordlist
 
 
-    
+# Read from old CSV format
+def get_wordlist_from_csv(filename):
+    wordlist = []
+    with open(filename, 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            letters, speed, accuracy, amt = (
+                row['Word'],
+                float(row['Raw']),
+                float(row['Accuracy']),
+                int(row['Amt. Typed'])
+            )
+            for i in range(amt):
+                wordlist.append(Word(
+                    letters=letters,
+                    wpm=speed,
+                    is_error=(i > accuracy*amt)
+                ))
+    return wordlist
+
+
+if __name__ == '__main__':
+    get_wordlist_from_csv('Rynchia.csv')
