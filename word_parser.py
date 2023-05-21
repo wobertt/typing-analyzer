@@ -31,7 +31,7 @@ def get_wordlist_from_html(filename):
             wpm=word_div.get('burst', None),
             is_error=('error' in word_div.get('class', None))
         ))
-    
+
     return wordlist
 
 
@@ -41,6 +41,9 @@ def get_wordlist_from_csv(filename):
     with open(filename, 'r') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+            # Must handle empty rows (words that weren't typed)
+            if not row['Raw']:
+                continue
             letters, speed, accuracy, amt = (
                 row['Word'],
                 float(row['Raw']),
