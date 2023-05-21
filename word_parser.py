@@ -54,7 +54,3 @@ def get_wordlist_from_csv(filename):
                     is_error=(i > accuracy*amt)
                 ))
     return wordlist
-
-
-if __name__ == '__main__':
-    get_wordlist_from_csv('Rynchia.csv')
