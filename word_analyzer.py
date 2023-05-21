@@ -42,7 +42,7 @@ class UserData:
             self.add_word(word)
     
 
-    def plot_speed_histogram(self, n_bins, name="Unnamed"):
+    def plot_speed_histogram(self, n_bins: int, name: str="Unnamed"):
         # Get all speed data
         speeds = []
         for speed_data in self.df.speeds:
@@ -68,7 +68,7 @@ class UserData:
         plt.show()
 
 
-    def get_full_table(self, sort_ascending=True):
+    def get_full_table(self, sort_ascending: bool=True):
         avg_speed = np.array(list(map(
             lambda x: sum(x)/len(x) if x else None,
             self.df.speeds)))
