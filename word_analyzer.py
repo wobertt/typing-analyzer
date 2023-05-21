@@ -17,13 +17,14 @@ class Word:
 
 class UserData:
     word_to_idx = {word: pos for pos, word in enumerate(ALL_WORDS)}
-    def __init__(self, wordlist=None):
+    def __init__(self, wordlist: list[Word]|None=None, name: str='Unnamed'):
         self.df = pd.DataFrame(
             {'words': ALL_WORDS,
              'speeds': [[] for _ in range(NUM_WORDS)],
              'errors': [[] for _ in range(NUM_WORDS)]
             }
         )
+        self.name = name
         
         if wordlist is not None:
             self.add_words(wordlist)
@@ -42,7 +43,7 @@ class UserData:
             self.add_word(word)
     
 
-    def plot_speed_histogram(self, n_bins: int, name: str="Unnamed"):
+    def plot_speed_histogram(self, n_bins: int, show: bool=True):
         # Get all speed data
         speeds = []
         for speed_data in self.df.speeds:
@@ -64,8 +65,10 @@ class UserData:
         
         ax.set_xlabel('WPM')
         ax.set_ylabel('Probability Density')
-        ax.set_title(f'{name}\'s Speed Histogram: $\mu={mu:.1f}$, $\sigma={sigma:.1f}$')
-        plt.show()
+        ax.set_title(f'{self.name}\'s Speed Histogram: $\mu={mu:.1f}$, $\sigma={sigma:.1f}$')
+        
+        if show:
+            plt.show()
 
 
     def get_full_table(self, sort_ascending: bool=True):
