@@ -94,3 +94,36 @@ class UserData:
         return table.sort_values(by='speed', 
                           ascending=sort_ascending,
                           ignore_index=True)
+
+
+    def get_population_relative_speeds(self, population_data: dict[str, 'UserData']):
+        # Aggregate data, using relative speeds to normalize
+        relative_data = UserData()
+        for user in population_data.values():
+            user_table = user.get_full_table()
+            for cur_word, rel_speed in zip(user_table['word'], user_table['relative']):
+                # Treat wpm as relative speed for now (column will be renamed)
+                relative_data.add_word(Word(
+                    letters=cur_word,
+                    wpm=rel_speed,
+                    is_error=False
+                ))
+        population_table = relative_data.get_full_table()
+        # Rename speed column and drop others to better express purpose of population_table
+        population_table.drop(['relative', 'accuracy', 'amt_typed'], axis=1, inplace=True)
+        population_table.rename(columns={'speed': 'population avg'}, inplace=True)
+
+        return population_table
+        
+    
+    def get_full_table_with_comparison(self, population_data: dict[str, 'UserData']):
+        # Assume that population_data has entries for all words
+        population_table = self.get_population_relative_speeds(population_data)
+        table = self.get_full_table()
+        # Use inner join (df.merge) to only include population data for words the user has typed
+        comparison_table = table.merge(population_table, left_on='word', right_on='word')
+
+        comparison_table['difference'] = comparison_table['relative'] - comparison_table['population avg']
+        return comparison_table.sort_values(
+            by='difference'
+        )
