@@ -1,5 +1,6 @@
-from constants import ALL_WORDS, NUM_WORDS
+from constants import ALL_WORDS, NUM_WORDS, MAX_SPEED
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 
@@ -30,7 +31,8 @@ class UserData:
     
 
     def add_word(self, word: Word):
-        print(word.__repr__())
+        if word.wpm is None:
+            return
         idx = UserData.word_to_idx[word.letters]
         self.df.speeds[idx].append(word.wpm)
         self.df.errors[idx].append(word.is_error)
@@ -41,15 +43,26 @@ class UserData:
             self.add_word(word)
     
 
-    def plot_speed_histogram(self):
+    def plot_speed_histogram(self, n_bins, name="Unnamed"):
+        # Get all speed data
         speeds = []
         for speed_data in self.df.speeds:
             speeds.extend(speed_data)
-        
         series = pd.Series(speeds)
         # Remove outliers
-        series_adjusted = series[series.between(series.quantile(.03), series.quantile(.97))]
+        series_adjusted = series[series.between(0, MAX_SPEED)]
 
-        series_adjusted.plot.hist(legend=False, bins=50)
-
+        _, ax = plt.subplots()
+        _, bins, _ = ax.hist(series_adjusted, bins=n_bins, density=True)
+        
+        # Add Gaussian approximation
+        mu = series_adjusted.mean()
+        sigma = series_adjusted.std()
+        y = ((1 / (np.sqrt(2 * np.pi) * sigma)) 
+             * np.exp(-0.5 * (1 / sigma * (bins - mu))**2))
+        ax.plot(bins, y, '--')
+        
+        ax.set_xlabel('WPM')
+        ax.set_ylabel('Probability Density')
+        ax.set_title(f'{name}\'s Speed Histogram: $\mu={mu:.1f}$, $\sigma={sigma:.1f}$')
         plt.show()

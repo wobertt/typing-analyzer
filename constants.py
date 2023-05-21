@@ -1,6 +1,4 @@
-WPM_TO_CPS = 1/12
-CPS_TO_WPM = 12
-
+MAX_SPEED = 400
 ALL_WORDS = (
     "the",
     "be",
@@ -202,5 +200,4 @@ ALL_WORDS = (
     "help",
     "line"
 )
-
 NUM_WORDS = len(ALL_WORDS)
