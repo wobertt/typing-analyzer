@@ -126,7 +126,8 @@ class UserData:
         # Use inner join (df.merge) to only include population data for words the user has typed
         comparison_table = table.merge(population_table, left_on='word', right_on='word')
 
-        comparison_table['difference'] = comparison_table['relative'] - comparison_table['population avg']
+        comparison_table['relative diff'] = comparison_table['relative'] / comparison_table['population avg']
         return comparison_table.sort_values(
-            by='difference'
+            by='relative diff',
+            ignore_index=True
         )
