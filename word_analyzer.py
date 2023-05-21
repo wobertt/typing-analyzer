@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 class Word:
     def __init__(self, letters, wpm, is_error):
         self.letters = letters
-        self.wpm = (None if wpm is None else int(wpm))
+        self.wpm = (None if wpm is None else float(wpm))
         self.is_error = is_error
 
     
