@@ -13,18 +13,20 @@ def get_all_user_data():
         get_wordlist_from_html(f'HTMLData/Octa {i}.txt') for i in range(1, 6)
     )
 
-    user_data = {name: UserData(data) for name, data in wordlists.items()}
+    user_data = {name: UserData(data, name) for name, data in wordlists.items()}
 
     return user_data
 
 
 def main():
-    user_data = get_all_user_data()
+    population_data = get_all_user_data()
 
-    for name, data in user_data.items():
-        print(name)
-        print(data.get_full_table())
+    # Add my data
+    my_data = UserData(name='Robert')
+    for i in range(1, 6):
+        my_data.add_words(get_wordlist_from_html(f'HTMLData/Wobert {i}.txt'))
 
+    print(my_data.get_full_table_with_comparison(population_data))
     
 
 if __name__ == '__main__':
